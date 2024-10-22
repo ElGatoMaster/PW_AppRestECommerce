@@ -31,6 +31,39 @@ export const getProdServItem = async (req, res, next) => {
     }
 };
 
+
+// Buscar productos por descripción
+export const buscarPorDescripcion = async (req, res) => {
+    try {
+      const productos = await productoService.searchProductsByDescription(req.query.q);
+      res.json(productos);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al buscar productos' });
+    }
+  };
+  
+  // Obtener productos activos
+  export const obtenerActivos = async (req, res) => {
+    try {
+      const productos = await productoService.getActiveProducts();
+      res.json(productos);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener los productos activos' });
+    }
+  };
+  
+  // Obtener productos por estatus
+  export const obtenerPorEstatus = async (req, res) => {
+    try {
+      const productos = await productoService.getProductsByStatus(req.params.tipo);
+      res.json(productos);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener productos por estatus' });
+    }
+  };
+
+
+
 //API POST (ADD) Producto.
 export const postProdServItem = async (req, res, next) => {
     try {
