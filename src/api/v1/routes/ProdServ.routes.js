@@ -5,9 +5,9 @@ const router = Router();
 router.get('/', prodServController.getProdServList);
 //API Get
 router.get('/:id', prodServController.getProdServItem);
-router.get('/search', productosController.buscarPorDescripcion);
-router.get('/activos', productosController.obtenerActivos);
-router.get('/estatus/:tipo', productosController.obtenerPorEstatus);
+router.get('/search', prodServController.buscarPorDescripcion);
+router.get('/activos', prodServController.obtenerActivos);
+router.get('/estatus/:tipo', prodServController.obtenerPorEstatus);
 //Ruta API POST
 router.post('/', prodServController.postProdServItem);
 
