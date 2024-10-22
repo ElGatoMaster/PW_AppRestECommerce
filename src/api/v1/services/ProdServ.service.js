@@ -39,12 +39,24 @@ export const getProdServItem = async (id, keyType) => {
 
 // Buscar productos por descripción
 export const searchProductsByDescription = async (q) => {
+  let products;
+
+  // Validar entrada
+  if (typeof q !== 'string') {
+      throw boom.badRequest('La consulta debe ser una cadena de texto');
+  }
+
   try {
-    return await Producto.find({ DesProdServ: { $regex: q, $options: 'i' } }).exec();
+      products  = await ProdServ.find({
+        DesProdServ: { $regex: q, $options: 'i' }
+      }).limit(50).exec(); // Limitar a 50 resultados
+      return products;
   } catch (error) {
-    throw boom.internal(error);
+      throw boom.internal(error);
   }
 };
+
+
 
 // Obtener productos activos
 export const getActiveProducts = async () => {

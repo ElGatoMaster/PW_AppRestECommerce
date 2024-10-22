@@ -8,6 +8,10 @@ GET {{api}}/1
 GET {{api}}/101?keyType=OK
 ### GET ITEM
 GET {{api}}/101?keyType=BK
+##Buscar por descripcion 
+GET {{api}}/101?keyType=BK
+##BUSCAR POR DESCRIPCION
+GET {{api}}/search?q=LapTop HP ZBOOK Firefly G8, Core i7, Full HD
 
 ### POST ITEM PRODUCTO
 POST {{api}}

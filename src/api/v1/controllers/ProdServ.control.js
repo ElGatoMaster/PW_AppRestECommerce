@@ -32,15 +32,22 @@ export const getProdServItem = async (req, res, next) => {
 };
 
 
-// Buscar productos por descripción
-export const buscarPorDescripcion = async (req, res) => {
-    try {
-      const productos = await productoService.searchProductsByDescription(req.query.q);
-      res.json(productos);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al buscar productos' });
+
+// Controlador para buscar productos por descripción
+export const buscarPorDescripcion = async (req, res, next) => {
+  try {
+    const productos = await ProdServServices.searchProductsByDescription(req.query.q);
+    
+    if (!productos || productos.length === 0) {
+      throw boom.notFound(`No se encontraron productos que coincidan con la descripción: "${req.query.q}"`);
     }
-  };
+
+    res.status(200).json(productos);
+  } catch (error) {
+    next(error);
+  }
+};
+
   
   // Obtener productos activos
   export const obtenerActivos = async (req, res) => {
