@@ -101,7 +101,7 @@ export const putProdServItem = async (id, paProdServItem) => {
 };
 
 //METODO PARA DELETE
-//ESTE ahorita esta inactivo
+//DELETE HARD
 export const deleteProdServItem = async (id, keyType) => {
   let prodServItem
   try {
