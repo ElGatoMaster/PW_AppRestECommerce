@@ -32,14 +32,35 @@ export const getProdServItem = async (req, res, next) => {
 };
 
 
+    
 
 // Controlador para buscar productos por descripción
 export const buscarPorDescripcion = async (req, res, next) => {
   try {
-    const productos = await ProdServServices.searchProductsByDescription(req.query.q);
+    // Obtiene el parámetro de búsqueda desde la consulta
+    const query = req.query.q;
+    // Llama al servicio para buscar productos
+    const productos = await ProdServServices.searchProductsByDescription(query);    
+    // Verifica si se encontraron productos
+    if (!productos || productos.length === 0) {
+      throw boom.notFound(`No se encontraron productos que coincidan con la descripción: "${query}"`);
+    }
+    // Devuelve los productos encontrados
+    res.status(200).json(productos);
+  } catch (error) {
+    next(error); // Maneja el error con el middleware
+  }
+};
+
+
+
+// Obtener productos activos
+export const obtenerActivos = async (req, res, next) => {
+  try {
+    const productos = await ProdServServices.getActiveProducts();
     
     if (!productos || productos.length === 0) {
-      throw boom.notFound(`No se encontraron productos que coincidan con la descripción: "${req.query.q}"`);
+      throw boom.notFound('No se encontraron productos activos');
     }
 
     res.status(200).json(productos);
@@ -48,26 +69,48 @@ export const buscarPorDescripcion = async (req, res, next) => {
   }
 };
 
-  
-  // Obtener productos activos
-  export const obtenerActivos = async (req, res) => {
-    try {
-      const productos = await productoService.getActiveProducts();
-      res.json(productos);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al obtener los productos activos' });
-    }
-  };
-  
-  // Obtener productos por estatus
-  export const obtenerPorEstatus = async (req, res) => {
-    try {
-      const productos = await productoService.getProductsByStatus(req.params.tipo);
-      res.json(productos);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al obtener productos por estatus' });
-    }
-  };
+
+// Obtener productos por estatus
+export const obtenerPorEstatus = async (req, res) => {
+  try {
+    const productos = await ProdServServices.getProductsByStatus(req.params.tipo);
+    res.json(productos);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener productos por estatus' });
+  }
+};
+
+// Obtener productos por negocio
+export const obtenerProductosPorNegocio = async (req, res, next) => {
+  try {
+    const productos = await ProdServServices.getProductsByBusiness(req.params.idNegocio);
+    res.status(200).json(productos);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// Controlador para obtener productos por descripción de presentación
+export const obtenerProductosPorDescripcionPresentacion = async (req, res, next) => {
+  try {
+    const productos = await ProdServServices.getProductsByPresentationDescription(req.params.desPresenta);
+    res.status(200).json(productos);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// Controlador para obtener estadísticas de productos
+export const obtenerEstadisticasProductos = async (req, res, next) => {
+  try {
+    const estadisticas = await ProdServServices.getProductStatistics();
+    res.status(200).json(estadisticas);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 

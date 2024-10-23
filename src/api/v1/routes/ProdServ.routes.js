@@ -3,11 +3,13 @@ import * as prodServController from '../controllers/ProdServ.control';
 const router = Router();
 //API GET
 router.get('/', prodServController.getProdServList);
-//API Get
-router.get('/:id', prodServController.getProdServItem);
+router.get('/producto/:id', prodServController.getProdServItem);
 router.get('/search', prodServController.buscarPorDescripcion);
 router.get('/activos', prodServController.obtenerActivos);
 router.get('/estatus/:tipo', prodServController.obtenerPorEstatus);
+router.get('/negocio/:idNegocio', prodServController.obtenerProductosPorNegocio);
+router.get('/presentacion/descripcion/:desPresenta', prodServController.obtenerProductosPorDescripcionPresentacion);
+router.get('/estadisticas', prodServController.obtenerEstadisticasProductos);
 //Ruta API POST
 router.post('/', prodServController.postProdServItem);
 

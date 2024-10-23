@@ -40,7 +40,6 @@ export const getProdServItem = async (id, keyType) => {
 // Buscar productos por descripción
 export const searchProductsByDescription = async (q) => {
   let products;
-
   // Validar entrada
   if (typeof q !== 'string') {
       throw boom.badRequest('La consulta debe ser una cadena de texto');
@@ -49,7 +48,7 @@ export const searchProductsByDescription = async (q) => {
   try {
       products  = await ProdServ.find({
         DesProdServ: { $regex: q, $options: 'i' }
-      }).limit(50).exec(); // Limitar a 50 resultados
+      })
       return products;
   } catch (error) {
       throw boom.internal(error);
@@ -57,11 +56,10 @@ export const searchProductsByDescription = async (q) => {
 };
 
 
-
 // Obtener productos activos
 export const getActiveProducts = async () => {
   try {
-    return await Producto.find({ 'detail_row.Activo': 'S' }).exec();
+    return await ProdServ.find({ 'detail_row.Activo': 'S' });
   } catch (error) {
     throw boom.internal(error);
   }
@@ -70,7 +68,47 @@ export const getActiveProducts = async () => {
 // Obtener productos por estatus
 export const getProductsByStatus = async (tipo) => {
   try {
-    return await Producto.find({ 'cat_prod_serv_estatus.TipoEstatus': tipo }).exec();
+    return await ProdServ.find({ 'cat_prod_serv_estatus.TipoEstatus': tipo }).exec();
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+
+// Servicio para obtener productos por negocio
+export const getProductsByBusiness = async (idNegocio) => {
+  try {
+    return await ProdServ.find({ 'negocios.IdNegocioOK': idNegocio }).exec();
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+
+// Servicio para obtener productos por descripción de presentación
+export const getProductsByPresentationDescription = async (desPresenta) => {
+  try {
+    return await ProdServ.find({ 'presentaciones.DesPresenta': { $regex: desPresenta, $options: 'i' } }).exec();
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+
+
+
+// Servicio para obtener estadísticas de productos
+export const getProductStatistics = async () => {
+  try {
+    const totalProductos = await ProdServ.countDocuments().exec();
+    const totalActivos = await ProdServ.countDocuments({ 'detail_row.Activo': 'S' }).exec();
+    const totalInactivos = totalProductos - totalActivos;
+
+    return {
+      total: totalProductos,
+      activos: totalActivos,
+      inactivos: totalInactivos,
+    };
   } catch (error) {
     throw boom.internal(error);
   }
