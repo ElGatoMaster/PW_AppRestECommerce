@@ -105,24 +105,49 @@ export const putProdServItem = async (req, res, next) => {
     }
 };
 
-//API DELETE Producto
+//API DELETE Producto HARD DELETE
 export const deleteProdServItem = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { keyType } = req.query;
-      console.log('controller id -> ', id);
-      console.log('controller keyType -> ', keyType);
-  
-      const deletedProdServItem = await ProdServServices.deleteProdServItem(id, keyType);
+      const { keyType="OK" } = req.query;
+      console.log('controlador id -> ', id);
+      console.log('controlador keyType -> ', keyType);
+
+      const deletedProdServItem = await ProdServServices.deleteProdServItem(id,keyType);
   
       if (!deletedProdServItem) {
-        throw boom.badRequest('No se pudo eliminar el Producto.');
+        throw boom.badRequest('El producto que deseas eliminar no exite, o ya fue eliminado');
+      }else{
+        res.status(200).json(deletedProdServItem);
       }
-  
-      res.status(200).json(deletedProdServItem);
     } catch (error) {
       console.error('Error en el controlador:', error);
       next(error);
     }
 };  
 
+
+//Control para solo actualizar los valores en un delete
+//SOFT DELETE
+export const deletePutProdServItem = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { keyType='OK' } = req.query;
+    console.log('controlador id -> ', id);
+    console.log('controlador keyType -> ', keyType);
+
+    const { usuario } = req.query.usuario || 'YVAN ACOSTA';
+    console.log('controlador usuario ->', usuario); 
+
+    const deletedProdServItem = await ProdServServices.deletePutProdServ(id,keyType,usuario);
+
+    if (!deletedProdServItem) {
+      throw boom.badRequest('El producto que deseas eliminar no exite, o ya fue eliminado');
+    }else{
+      res.status(200).json(deletedProdServItem);
+    }
+  } catch (error) {
+    console.error('Error en el controlador:', error);
+    next(error);
+  }
+};  

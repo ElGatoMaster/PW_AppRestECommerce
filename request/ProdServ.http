@@ -5,9 +5,9 @@ GET {{api}}
 ### GET ITEM
 GET {{api}}/1
 ### GET ITEM
-GET {{api}}/101?keyType=OK
+GET {{api}}/102?keyType=OK
 ### GET ITEM
-GET {{api}}/101?keyType=BK
+GET {{api}}/102?keyType=BK
 ##Buscar por descripcion 
 GET {{api}}/101?keyType=BK
 ##BUSCAR POR DESCRIPCION
@@ -19,12 +19,12 @@ POST {{api}}
 Content-Type: application/json
 
 {
-    "IdProdServPK" : 101, 
-    "IdProdServOK" : "101", 
-    "IdProdServBK" : "ENSA101", 
+    "IdProdServPK" : 103, 
+    "IdProdServOK" : "103", 
+    "IdProdServBK" : "ENSA103", 
     "IdProdServMaOK" : "1", 
     "IdProdServMaBK" : "1", 
-    "DesProdServ" : "ENFRIADOR VERTICAL PARA ELIMINAR", 
+    "DesProdServ" : "ENFRIADOR VERTICAL ELIMINAR Completamente", 
     "IdUMedidaOK" : "1", 
     "IdUMedidaBK" : "1", 
     "cat_prod_serv_estatus" : [
@@ -161,12 +161,12 @@ Content-Type: application/json
 }
 
 ### PUT ITEM PRODUCTO 
-PUT {{api}}/100
+PUT {{api}}/102
 Content-Type: application/json
 
 {
-    "IdProdServPK" : 100, 
-    "IdProdServOK" : "100", 
+    "IdProdServPK" : 102, 
+    "IdProdServOK" : "102", 
     "IdProdServBK" : "ENSA100", 
     "IdProdServMaOK" : "1", 
     "IdProdServMaBK" : "1", 
@@ -306,7 +306,9 @@ Content-Type: application/json
     }
 }
 
-### DELETE ITEM
-DELETE {{api}}/101
-### DELETE ITEM
-DELETE {{api}}/101?keyType=OK
+### DELETE fisicamente
+DELETE {{api}}/hard/103
+### DELETE solo en estatus
+DELETE {{api}}/soft/102?keyType=OK
+### DELETE Solo en estatus
+DELETE {{api}}/soft/101

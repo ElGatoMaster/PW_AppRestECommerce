@@ -101,6 +101,7 @@ export const putProdServItem = async (id, paProdServItem) => {
 };
 
 //METODO PARA DELETE
+//ESTE ahorita esta inactivo
 export const deleteProdServItem = async (id, keyType) => {
   let prodServItem
   try {
@@ -110,6 +111,29 @@ export const deleteProdServItem = async (id, keyType) => {
       prodServItem = await ProdServ.findOneAndDelete({ IdProdServBK: id });
     }
     return (prodServItem);
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+//Metodo que actualiza el estado en lugar de eliminar
+export const deletePutProdServ = async (id, keyType, usuario) => {
+  try {
+    let update = {
+      "detail_row.Activo":"N",
+      "detail_row.Borrado": 'S',
+      "detail_row.FechaUltMod": new Date(),
+      "detail_row.UsuarioMod": usuario
+    };
+
+    let prodServItem;
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOneAndUpdate({ IdProdServOK: id }, update, { new: true });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOneAndUpdate({ IdProdServBK: id }, update, { new: true });
+    }
+
+    return prodServItem;
   } catch (error) {
     throw boom.internal(error);
   }

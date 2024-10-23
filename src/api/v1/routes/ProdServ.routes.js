@@ -14,8 +14,9 @@ router.post('/', prodServController.postProdServItem);
 //ruta para API PUT
 router.put('/:id', prodServController.putProdServItem);
 
-//API DELETE
-//API DELETE
-router.delete('/:id', prodServController.deleteProdServItem);
+//API DELETE fisicamente
+router.delete('/hard/:id', prodServController.deleteProdServItem);
+//API DELETE solo cambiando el estado del producto
+router.delete('/soft/:id',prodServController.deletePutProdServItem);
 
 export default router;
