@@ -1,79 +1,172 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
+const ProdServSchema = new mongoose.Schema({
+    IdInstitutoOK: {type: String},
+    IdProdServOK: {type: String},
+    IdProdServBK: {type: String},
+    CodigoBarras: {type: String},
+    DesProdServ: {type: String},
+    Indice: {type: String},
+    estatus: [
+        {
+            _id: false,
+            IdTipoEstatusOK: {type: String},
+            Actual: {type: String, default: 'S'},
+            Observacion: {type: String},
+            detail_row: {
+                Activo: {type: String, default: 'S'},
+                Borrado: {type: String, default: 'N'},
+                detail_row_reg: [
+                    {
+                        _id: false,
+                        FechaReg: {type: Date, default: Date.now()},
+                        UsuarioReg: {type: String, default: 'SYSTEM'}
+                    },
+                ],
+            },
+        },
+    ],
+    info_ad: [
+        {
+            _id: false,
+            IdEtiquetaOK: {type: String},
+            IdEtiqueta: {type: String},
+            Valor: {type: String},
+            IdTipoSeccionOK: {type: String},
+            Secuencia: {type: Number},
+            detail_row: {
+                Activo: {type: String},
+                Borrado: {type: String},
+                detail_row_reg: [
+                    {
+                        _id: false,
+                        FechaReg: {type: Date, default: Date.now()},
+                        UsuarioReg: {type: String, default: 'SYSTEM'},
 
-const DetailRowSchema = new Schema({
-  Activo: { type: String, default: 'S' },
-  Borrado: { type: String, default: 'N' },
-  detail_row_reg: [{
-    FechaReg: { type: Date, default: Date.now },
-    UsuarioReg: { type: String }
-  }]
-});
-const EstatusSchema = new Schema({
-  IdTipoEstatusOK: { type: String },
-  Actual: { type: String },
-  Observacion: { type: String },
-  detail_row: DetailRowSchema
-});
-const InfoAdSchema = new Schema({
-  IdEtiquetaOK: { type: String },
-  IdEtiqueta: { type: String },
-  Etiqueta: { type: String },
-  Valor: { type: String },
-  IdTipoSeccionOK: { type: String },
-  Secuencia: { type: Number },
-  detail_row: DetailRowSchema
-});
-const PaqueteSchema = new Schema({
-  IdPresentaOK: { type: String },
-  DesPresenta: { type: String },
-  Cantidad: { type: Number },
-  detail_row: DetailRowSchema
-});
-const ArchivoSchema = new Schema({
-  IdArchivoOK: { type: String },
-  IdArchivoBK: { type: String },
-  DesArchivo: { type: String },
-  RutaArchivo: { type: String },
-  Path: { type: String },
-  IdTipoArchivoOK: { type: String },
-  IdTipoSeccionOK: { type: String },
-  Secuencia: { type: Number },
-  Principal: { type: String },
-  detail_row: DetailRowSchema
-});
-const PresentacionSchema = new Schema({
-  IdPresentaOK: { type: String },
-  IdPresentaBK: { type: String },
-  CodigoBarras: { type: String },
-  DesPresenta: { type: String },
-  Indice: { type: String },
-  Principal: { type: String },
-  estatus: [EstatusSchema],
-  info_vta: [{ type: Schema.Types.Mixed }],
-  info_ad: [InfoAdSchema],
-  paquete: [PaqueteSchema],
-  archivos: [ArchivoSchema],
-  detail_row: DetailRowSchema
-});
-const NegocioSchema = new Schema({
-  IdNegocioOK: { type: String },
-  detail_row: DetailRowSchema
-});
-const ProdServSchema = new Schema({
-  IdInstitutoOK: { type: String },
-  IdProdServOK: { type: String },
-  IdProdServBK: { type: String },
-  CodigoBarras: { type: String },
-  DesProdServ: { type: String },
-  Indice: { type: String },
-  estatus: [EstatusSchema],
-  presentaciones: [PresentacionSchema],
-  archivos: [ArchivoSchema],
-  negocios: [NegocioSchema],
-  info_ad: [InfoAdSchema],
-  detail_row: DetailRowSchema
-});
+                    },
+                ],
+            },
+        },
+    ],
+    presentaciones: [
+        {
+            _id: false,
+            IdPresentaOK: {type: String},
+            IdPresentaBK: {type: String},
+            CodigoBarras: {type: String},
+            DesPresenta: {type: String},
+            Indice: {type: String},
+            presentaciones_info_add: [
+                {
+                    _id: false,
+                    IdEtiquetaOK: {type: String},
+                    IdEtiqueta: {type: String},
+                    Valor: {type: String},
+                    IdTipoSeccionOK: {type: String},
+                    Secuencia: {type: Number},
+                    detail_row: {
+                        Activo: {type: String, default: 'S'},
+                        Borrado: {type: String, default: 'N'},
+                        detail_row_reg: [
+                            {
+                                FechaReg: {type: Date, default: Date.now},
+                                UsuarioReg: {type: String},
+                                _id: false,
+                            },
+                        ],
+                    },
+                },
+            ],
+            presentaciones_paquete: [
+                {
+                    _id: false,
+                    IdPresentaOK: {type: String},
+                    DesPresenta: {type: String},
+                    Cantidad: {type: Number},
+                    detail_row: {
+                        _id: false,
+                        Activo: {type: String, default: 'S'},
+                        Borrado: {type: String, default: 'N'},
+                        detail_row_reg: [
+                            {
+                                _id: false,
+                                FechaReg: {type: Date, default: Date.now()},
+                                UsuarioReg: {type: String, default: 'SYSTEM'}
+                            }
+                        ]
+                    },
+                },
+            ],
+            presentaciones_archivos: [
+                {
+                    _id: false,
+                    IdArchivoOK: {type: String},
+                    IdArchivoBK: {type: String},
+                    DesArchivo: {type: String},
+                    RutaArchivo: {type: String},
+                    IdTipoArchivoOK: {type: String},
+                    Archivo: {type: String},
+                    IdTipoSeccionOK: {type: String},
+                    Secuencia: {type: Number},
+                    Principal: {type: String},
+                    detail_row: {
+                        Activo: {type: String, default: 'S'},
+                        Borrado: {type: String, default: 'N'},
+                        detail_row_reg: [
+                            {
+                                _id: false,
+                                FechaReg: {type: Date, default: Date.now()},
+                                UsuarioReg: {type: String, default: 'SYSTEM'}
+
+                            },
+                        ],
+                    },
+                },
+            ],
+            detail_row: {
+                _id: false,
+                Activo: {type: String, default: 'S'},
+                Borrado: {type: String, default: 'N'},
+                detail_row_reg: [
+                    {
+                        _id: false,
+                        FechaReg: {type: Date, default: Date.now()},
+                        UsuarioReg: {type: String, default: 'SYSTEM'}
+                    }
+                ]
+            },
+        },
+    ],
+    negocios: [
+        {
+            _id: false,
+            IdNegocioOK: {type: String},
+            detail_row: {
+                _id: false,
+                Activo: {type: String, default: 'S'},
+                Borrado: {type: String, default: 'N'},
+                detail_row_reg: [
+                    {
+                        _id: false,
+                        FechaReg: {type: Date, default: Date.now},
+                        UsuarioReg: {type: String},
+                    },
+                ],
+            },
+        }
+    ],
+    detail_row: {
+        Activo: {type: String, default: 'S'},
+        Borrado: {type: String, default: 'N'},
+        detail_row_reg: [
+            {
+                FechaReg: {type: Date, default: Date.now()},
+                UsuarioReg: {type: String, default: 'SYSTEM'},
+                _id: false,
+            },
+        ],
+    },
+}, {versionKey: false});
+
 
 module.exports = mongoose.model('cat_productos', ProdServSchema);
