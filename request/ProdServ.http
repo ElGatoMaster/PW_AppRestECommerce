@@ -1,9 +1,9 @@
 @api = http://localhost:3020/api/v1/prod-serv
 #@api = http://187.229.22.99:8010/api/v1/prod-serv
 ### GET
-GET {{api}}
+GET {{api}}/producto/9001-000000000001
 ### GET ITEM
-GET {{api}}/1
+GET {{api}}/presentacion/9001-000000000001/
 ### GET ITEM
 GET {{api}}/102?keyType=OK
 ### GET ITEM
@@ -22,7 +22,9 @@ GET {{api}}/negocio/9001-TODOS
 GET {{api}}/presentacion/descripcion/Empresarial Gris Oxford - 500GB - 32RAM
 ### GET ESTADISTICAS
 GET {{api}}/estadisticas
+### GET
 
+GET {{api}}/presentacion/9001-000000000001/9001-000000000001-000000001/estatus
 
 
 ### POST ITEM PRODUCTO
@@ -170,6 +172,32 @@ Content-Type: application/json
         "Borrado" : "N"
     }
 }
+
+
+### POST PRESENTACION
+POST {{api}}/presentacion/9001-000000000001/
+Content-Type: application/json
+
+{
+  "IdPresentaOK": "new-id",
+  "IdPresentaBK": "new-id-bk",
+  "CodigoBarras": "new-barcode",
+  "DesPresenta": "Nueva Presentación",
+  "Indice": "001",
+  "Principal": "S",
+  "estatus": [
+    {
+      "IdTipoEstatusOK": "1",
+      "Actual": "S",
+      "Observacion": "Presentación activa"
+    }
+  ],
+  "info_vta": [],
+  "info_ad": [],
+  "paquete": [],
+  "archivos": []
+}
+
 
 ### DELETE fisicamente
 DELETE {{api}}/hard/103

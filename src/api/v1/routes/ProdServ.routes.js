@@ -21,4 +21,16 @@ router.delete('/hard/:id', prodServController.deleteProdServItem);
 //API DELETE solo cambiando el estado del producto
 router.delete('/soft/:id',prodServController.deletePutProdServItem);
 
+
+
+//PRESENTACIONES
+router.get('/presentacion/:id', prodServController.getProdServPresentations);
+router.post('/presentacion/:id', prodServController.addProdServPresentation);
+//PRESENTACIONES ESTATUS
+router.get('/presentacion/:id/:presentaId/estatus',prodServController.getProdServPresentationStatus);
+
+
+
+
+
 export default router;

@@ -194,3 +194,69 @@ export const deletePutProdServItem = async (req, res, next) => {
     next(error);
   }
 };  
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------------PRESENTACIONES---------------------------------------------------/
+export const getProdServPresentations = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const keyType = req.query.keyType || 'OK';
+
+    // Llamar al servicio para obtener las presentaciones del producto
+    const presentations = await ProdServServices.getProdServPresentations(id, keyType);
+    
+    if (!presentations) {
+      throw boom.notFound('No se encontraron presentaciones para este producto.');
+    } else {
+      res.status(200).json(presentations); // Retornar solo las presentaciones
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+//POST
+export const addProdServPresentation = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const keyType = req.query.keyType || 'OK';
+    const newPresentation = req.body;  // Obtener la nueva presentación desde el cuerpo de la solicitud
+
+    // Llamar al servicio para agregar la nueva presentación
+    const updatedPresentations = await ProdServServices.addProdServPresentation(id, keyType, newPresentation);
+    
+    res.status(201).json(updatedPresentations); // Retornar las presentaciones actualizadas
+  } catch (error) {
+    next(error);
+  }
+};
+
+//---------------------------------PRESENTACIONES ESTATUS------------------------------/
+//----------------------------------GET
+export const getProdServPresentationStatus = async (req, res, next) => {
+  try {
+    const { id, presentaId } = req.params;  // Obtenemos el id del producto y el id de la presentación
+    const keyType = req.query.keyType || 'OK';  // Obtenemos el tipo de clave (OK o BK)
+
+    // Llamar al servicio para obtener los estatus de una presentación
+    const status = await ProdServServices.getProdServPresentationsS(id, keyType, presentaId);
+
+    if (!status || status.length === 0) {
+      throw boom.notFound('No se encontraron estatus para esta presentación.');
+    } else {
+      res.status(200).json(status); // Retornamos solo los estatus
+    }
+  } catch (error) {
+    next(error);  // Pasamos el error al middleware de manejo de errores
+  }
+};
+
