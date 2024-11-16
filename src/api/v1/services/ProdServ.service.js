@@ -236,36 +236,5 @@ export const addProdServPresentation = async (id, keyType, newPresentation) => {
 };
 
 
-//----------------------------ESTATUS DE PRESENTACIONES
+//----------------------------Info add Presentaciones
 //GET
-export const getProdServPresentationsS = async (id, keyType, presentaId) => {
-  let prodServItem;
-  
-  try {
-    // Buscar el producto por IdProdServOK o IdProdServBK y devolver solo las presentaciones
-    if (keyType === 'OK') {
-      prodServItem = await ProdServ.findOne({ IdProdServOK: id }).select('presentaciones');
-    } else if (keyType === 'BK') {
-      prodServItem = await ProdServ.findOne({ IdProdServBK: id }).select('presentaciones');
-    }
-
-    if (!prodServItem) {
-      throw boom.notFound('Producto no encontrado.');
-    }
-
-    // Buscar la presentación por su ID (IdPresentaOK)
-    const presentation = prodServItem.presentaciones.find(p => p.IdPresentaOK === presentaId);
-
-    if (!presentation) {
-      throw boom.notFound('Presentación no encontrada.');
-    }
-
-    // Retornamos solo los estatus de la presentación
-    return presentation.estatus;  // Solo los estatus
-
-  } catch (error) {
-    throw boom.internal(error);
-  }
-};
-
-

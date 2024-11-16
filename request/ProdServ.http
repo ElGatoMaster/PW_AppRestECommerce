@@ -1,9 +1,12 @@
 @api = http://localhost:3020/api/v1/prod-serv
 #@api = http://187.229.22.99:8010/api/v1/prod-serv
+
+### GET
+get {{api}}/
 ### GET
 GET {{api}}/producto/9001-000000000001
 ### GET ITEM
-GET {{api}}/presentacion/9001-000000000001/
+GET {{api}}/presentacion/9001-000000000001
 ### GET ITEM
 GET {{api}}/102?keyType=OK
 ### GET ITEM
@@ -23,9 +26,14 @@ GET {{api}}/presentacion/descripcion/Empresarial Gris Oxford - 500GB - 32RAM
 ### GET ESTADISTICAS
 GET {{api}}/estadisticas
 ### GET
+get {{api}}/presentacion/9001-000000000001/info/9001-000000000001-000000001
 
-GET {{api}}/presentacion/9001-000000000001/9001-000000000001-000000001/estatus
+### GET
+get {{api}}/presentacion/9001-000000000001/paquete/9001-000000000001-000000001
 
+
+### GET
+get {{api}}/presentacion/9001-000000000001/archivos/9001-000000000001-000000001
 
 ### POST ITEM PRODUCTO
 POST {{api}}
@@ -179,7 +187,7 @@ POST {{api}}/presentacion/9001-000000000001/
 Content-Type: application/json
 
 {
-  "IdPresentaOK": "new-id",
+  "IdPresentaOK": "new-isadsadd",
   "IdPresentaBK": "new-id-bk",
   "CodigoBarras": "new-barcode",
   "DesPresenta": "Nueva Presentación",

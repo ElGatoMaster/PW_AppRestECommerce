@@ -240,23 +240,77 @@ export const addProdServPresentation = async (req, res, next) => {
   }
 };
 
-//---------------------------------PRESENTACIONES ESTATUS------------------------------/
+//---------------------------------PRESENTACIONES presentaciones_info_add------------------------------/
 //----------------------------------GET
-export const getProdServPresentationStatus = async (req, res, next) => {
+
+
+export const getProdServPresentationInfoAdd = async (req, res, next) => {
   try {
-    const { id, presentaId } = req.params;  // Obtenemos el id del producto y el id de la presentación
-    const keyType = req.query.keyType || 'OK';  // Obtenemos el tipo de clave (OK o BK)
-
-    // Llamar al servicio para obtener los estatus de una presentación
-    const status = await ProdServServices.getProdServPresentationsS(id, keyType, presentaId);
-
-    if (!status || status.length === 0) {
-      throw boom.notFound('No se encontraron estatus para esta presentación.');
-    } else {
-      res.status(200).json(status); // Retornamos solo los estatus
+    const { id, idPresentacion } = req.params;  // Obtener el id del producto y el id de la presentación
+    const keyType = req.query.keyType || 'OK';   // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    // Buscar el producto y la presentación dentro de las presentaciones
+    const prodServItem = await ProdServServices.getProdServItem(id, keyType);
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
     }
+    // Buscar la presentación específica dentro de las presentaciones del producto
+    const presentacion = prodServItem.presentaciones.find(p => p.IdPresentaOK === idPresentacion || p.IdPresentaBK === idPresentacion);
+    if (!presentacion) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+    // Devolver la información de "presentaciones_info_add"
+    res.status(200).json(presentacion.info_ad);
   } catch (error) {
-    next(error);  // Pasamos el error al middleware de manejo de errores
+    next(error);
   }
 };
 
+//---------------------------------PRESENTACIONES presentaciones_paquete------------------------------/
+//----------------------------------GET
+
+export const getProdServPresentationPaquete = async (req, res, next) => {
+  try {
+    const { id, idPresentacion } = req.params;  // Obtener el id del producto y el id de la presentación
+    const keyType = req.query.keyType || 'OK';   // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    // Buscar el producto y la presentación dentro de las presentaciones
+    const prodServItem = await ProdServServices.getProdServItem(id, keyType);
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+    // Buscar la presentación específica dentro de las presentaciones del producto
+    const presentacion = prodServItem.presentaciones.find(p => p.IdPresentaOK === idPresentacion || p.IdPresentaBK === idPresentacion);
+    if (!presentacion) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+    // Devolver la información de "presentaciones_info_add"
+    res.status(200).json(presentacion.paquete);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//------------------------------Archivos
+//Get
+//---------------------------------PRESENTACIONES presentaciones_paquete------------------------------/
+//----------------------------------GET
+
+export const getProdServPresentationArchivo = async (req, res, next) => {
+  try {
+    const { id, idPresentacion } = req.params;  // Obtener el id del producto y el id de la presentación
+    const keyType = req.query.keyType || 'OK';   // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    // Buscar el producto y la presentación dentro de las presentaciones
+    const prodServItem = await ProdServServices.getProdServItem(id, keyType);
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+    // Buscar la presentación específica dentro de las presentaciones del producto
+    const presentacion = prodServItem.presentaciones.find(p => p.IdPresentaOK === idPresentacion || p.IdPresentaBK === idPresentacion);
+    if (!presentacion) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+    // Devolver la información de "presentaciones_info_add"
+    res.status(200).json(presentacion.archivos);
+  } catch (error) {
+    next(error);
+  }
+};
