@@ -236,5 +236,214 @@ export const addProdServPresentation = async (id, keyType, newPresentation) => {
 };
 
 
+
+// PUT - Actualizar una presentación existente
+export const updateProdServPresentation = async (id, keyType, presentationId, updatedPresentation) => {
+  
+  try {
+    let prodServItem;
+
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+    console.log("hola servicio",presentationId)
+    // Buscar la presentación a actualizar
+    const presentationIndex = prodServItem.presentaciones.findIndex(p => p.IdPresentaOK === presentationId);
+ 
+    if (presentationIndex === -1) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Actualizar la presentación
+    prodServItem.presentaciones[presentationIndex] = { ...prodServItem.presentaciones[presentationIndex], ...updatedPresentation };
+
+    // Guardar el producto actualizado
+    await prodServItem.save();
+
+    return prodServItem.presentaciones;  // Retornar las presentaciones actualizadas
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+// DELETE - Eliminar una presentación existente
+export const deleteProdServPresentation = async (id, keyType, presentationId) => {
+  try {
+    let prodServItem;
+
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación a eliminar
+    const presentationIndex = prodServItem.presentaciones.findIndex(p => p.IdPresentaOK === presentationId);
+
+    if (presentationIndex === -1) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Eliminar la presentación
+    prodServItem.presentaciones.splice(presentationIndex, 1);
+
+    // Guardar el producto actualizado
+    await prodServItem.save();
+
+    return prodServItem.presentaciones;  // Retornar las presentaciones restantes
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
 //----------------------------Info add Presentaciones
 //GET
+//------------------------------------------POST
+export const addProdServPresentationInfoAdd = async (id, keyType, presentationId, newInfo) => {
+  try {
+    console.log("neta?",presentationId)
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const matchesPresentationId = (p, presentationId) => {
+      const okMatch = p.IdPresentaOK && p.IdPresentaOK == presentationId;
+      console.log(presentationId,id)
+      console.log(p.IdPresentaOK)
+      const bkMatch = p.IdPresentaBK && p.IdPresentaBK == presentationId;
+      console.log(p.IdPresentaBK)
+      return okMatch || bkMatch;
+    };
+    
+    const presentation = prodServItem.presentaciones.find(p => matchesPresentationId(p, presentationId));
+    
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Agregar la nueva información al subdocumento info_ad
+    presentation.info_ad.push(newInfo);
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación actualizada con el nuevo info_ad
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+//-----------------------PUT
+export const updateProdServPresentationInfoAdd = async (id, keyType, presentationId, infoID, updatedInfo) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const matchesPresentationId = (p, presentationId) => {
+      const okMatch = p.IdPresentaOK && p.IdPresentaOK == presentationId;
+      console.log(presentationId,id,infoID)
+      console.log(p.IdPresentaOK)
+      const bkMatch = p.IdPresentaBK && p.IdPresentaBK == presentationId;
+      console.log(p.IdPresentaBK)
+      return okMatch || bkMatch;
+    };
+    
+    const presentation = prodServItem.presentaciones.find(p => matchesPresentationId(p, presentationId));
+    
+
+    // Buscar el info_ad a actualizar dentro de la presentación
+    const infoIndex = presentation.info_ad.findIndex(info => info.IdEtiquetaOK === infoID);
+    if (infoIndex === -1) {
+      throw boom.notFound('Información adicional no encontrada.');
+    }
+
+    // Actualizar el info_ad
+    presentation.info_ad[infoIndex] = { ...presentation.info_ad[infoIndex], ...updatedInfo };
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación actualizada con la información modificada
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+//-----------------------------------DELETE
+export const deleteProdServPresentationInfoAdd = async (id, keyType, presentationId, infoID) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const matchesPresentationId = (p, presentationId) => {
+      const okMatch = p.IdPresentaOK && p.IdPresentaOK == presentationId;
+      const bkMatch = p.IdPresentaBK && p.IdPresentaBK == presentationId;
+      return okMatch || bkMatch;
+    };
+
+    const presentation = prodServItem.presentaciones.find(p => matchesPresentationId(p, presentationId));
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Buscar el info_ad a eliminar dentro de la presentación
+    const infoIndex = presentation.info_ad.findIndex(info => info.IdEtiquetaOK === infoID);
+    if (infoIndex === -1) {
+      throw boom.notFound('Información adicional no encontrada.');
+    }
+
+    // Eliminar la información adicional
+    presentation.info_ad.splice(infoIndex, 1);
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación actualizada sin la información eliminada
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+

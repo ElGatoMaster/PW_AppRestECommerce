@@ -26,11 +26,18 @@ router.delete('/soft/:id',prodServController.deletePutProdServItem);
 //PRESENTACIONES
 router.get('/presentacion/:id', prodServController.getProdServPresentations);
 router.post('/presentacion/:id', prodServController.addProdServPresentation);
+router.put('/presentacion/:id/:presentationId', prodServController.updateProdServPresentation);
+router.delete('/presentacion/:id/:presentationId', prodServController.deleteProdServPresentation);
+//----------------------------------------------------------------------------------------------
 //PRESENTACIONES presentaciones_info_add
 router.get('/presentacion/:id/info/:idPresentacion', prodServController.getProdServPresentationInfoAdd);
+router.post('/presentacion/:id/info/:presentationId', prodServController.addProdServPresentationInfoAdd);
+router.put('/presentacion/:id/info/:presentationId/:infoID', prodServController.updateProdServPresentationInfoAdd);
+router.delete('/presentacion/:id/info/:idPresentacion/:infoAdId', prodServController.deleteProdServPresentationInfoAdd);
+
+//------------------------------------------------------------------------------------------------------
 //PRESENTACIONES PAQUETE
 router.get('/presentacion/:id/paquete/:idPresentacion', prodServController.getProdServPresentationPaquete);
-
 //PRESENTACIONES ARCHIVOS
 router.get('/presentacion/:id/archivos/:idPresentacion', prodServController.getProdServPresentationArchivo);
 

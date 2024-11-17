@@ -239,6 +239,40 @@ export const addProdServPresentation = async (req, res, next) => {
     next(error);
   }
 };
+//PUT
+export const updateProdServPresentation = async (req, res, next) => {
+ 
+  try {
+    const { id, presentationId } = req.params;
+    const keyType = req.query.keyType || 'OK';
+    const updatedPresentation = req.body;
+    console.log("hola cotnrol",presentationId)
+    // Llamar al servicio para actualizar la presentación
+    const updatedPresentations = await ProdServServices.updateProdServPresentation(id, keyType, presentationId, updatedPresentation);
+    console.log(updatedPresentations,"Control")
+    res.status(200).json(updatedPresentations); // Retornar las presentaciones actualizadas
+  } catch (error) {
+    next(error);
+  }
+};
+
+// DELETE - Eliminar una presentación
+export const deleteProdServPresentation = async (req, res, next) => {
+  try {
+    const { id, presentationId } = req.params;
+    const keyType = req.query.keyType || 'OK';
+
+    // Llamar al servicio para eliminar la presentación
+    const updatedPresentations = await ProdServServices.deleteProdServPresentation(id, keyType, presentationId);
+
+    res.status(200).json(updatedPresentations); // Retornar las presentaciones restantes
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 
 //---------------------------------PRESENTACIONES presentaciones_info_add------------------------------/
 //----------------------------------GET
@@ -264,6 +298,56 @@ export const getProdServPresentationInfoAdd = async (req, res, next) => {
     next(error);
   }
 };
+
+//---------------------------POST
+export const addProdServPresentationInfoAdd = async (req, res, next) => {
+  try {
+    const { id, presentationId } = req.params;
+    // Obtener el id del producto y la presentación
+    console.log("aqui si?",presentationId,id)
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    const newInfo = req.body; // Obtener la nueva información a agregar al subdocumento info_ad
+
+    // Llamar al servicio para agregar la nueva información
+    const updatedPresentation = await ProdServServices.addProdServPresentationInfoAdd(id, keyType, presentationId, newInfo);
+
+    res.status(201).json(updatedPresentation); // Retornar la presentación con la nueva información
+  } catch (error) {
+    next(error);
+  }
+};
+
+//-------------------------PUT
+export const updateProdServPresentationInfoAdd = async (req, res, next) => {
+  try {
+    const { id, presentationId, infoID } = req.params; // Obtener los IDs
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    const updatedInfo = req.body; // Obtener la nueva información a actualizar en info_ad
+
+    // Llamar al servicio para actualizar la información
+    const updatedPresentation = await ProdServServices.updateProdServPresentationInfoAdd(id, keyType, presentationId, infoID, updatedInfo);
+
+    res.status(200).json(updatedPresentation); // Retornar la presentación actualizada
+  } catch (error) {
+    next(error);
+  }
+};
+
+//------------------------DELETE
+export const deleteProdServPresentationInfoAdd = async (req, res, next) => {
+  try {
+    const { id, idPresentacion, infoAdId } = req.params; // Obtener los IDs
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+
+    // Llamar al servicio para eliminar la información
+    const updatedPresentation = await ProdServServices.deleteProdServPresentationInfoAdd(id, keyType, idPresentacion, infoAdId);
+
+    res.status(200).json(updatedPresentation); // Retornar la presentación actualizada sin el info_ad eliminado
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 //---------------------------------PRESENTACIONES presentaciones_paquete------------------------------/
 //----------------------------------GET
