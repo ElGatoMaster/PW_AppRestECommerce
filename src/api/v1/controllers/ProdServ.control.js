@@ -373,6 +373,63 @@ export const getProdServPresentationPaquete = async (req, res, next) => {
   }
 };
 
+//POST
+export const addProdServPaquete = async (req, res, next) => {
+  try {
+    const { id, presentationId } = req.params;
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    const newPaquete = req.body; // Obtener la nueva información de paquete a agregar
+
+    // Llamar al servicio para agregar la nueva información
+    const updatedPresentation = await ProdServServices.addProdServPaquete(id, keyType, presentationId, newPaquete);
+
+    res.status(201).json(updatedPresentation); // Retornar la presentación con el nuevo paquete
+  } catch (error) {
+    next(error);
+  }
+};
+
+//-------------------------PUT
+export const updateProdServPaquete = async (req, res, next) => {
+  try {
+    const { id, presentationId, paqueteId } = req.params; // Obtener los IDs
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    const updatedPaquete = req.body; // Obtener la nueva información de paquete
+
+    // Llamar al servicio para actualizar el paquete
+    const updatedPresentation = await ProdServServices.updateProdServPaquete(id, keyType, presentationId, paqueteId, updatedPaquete);
+
+    res.status(200).json(updatedPresentation); // Retornar la presentación actualizada con el paquete modificado
+  } catch (error) {
+    next(error);
+  }
+};
+
+//------------------------DELETE
+export const deleteProdServPaquete = async (req, res, next) => {
+  try {
+    const { id, idPresentacion, paqueteId } = req.params; // Obtener los IDs
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+
+    // Llamar al servicio para eliminar el paquete
+    const updatedPresentation = await ProdServServices.deleteProdServPaquete(id, keyType, idPresentacion, paqueteId);
+
+    res.status(200).json(updatedPresentation); // Retornar la presentación actualizada sin el paquete eliminado
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 //------------------------------Archivos
 //Get
 //---------------------------------PRESENTACIONES presentaciones_paquete------------------------------/
@@ -394,6 +451,52 @@ export const getProdServPresentationArchivo = async (req, res, next) => {
     }
     // Devolver la información de "presentaciones_info_add"
     res.status(200).json(presentacion.archivos);
+  } catch (error) {
+    next(error);
+  }
+};
+//-----------------------POST
+export const addProdServArchivo = async (req, res, next) => {
+  try {
+    const { id, idPresentacion } = req.params;
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    const newArchivo = req.body; // Obtener la nueva información de archivo a agregar
+
+    // Llamar al servicio para agregar la nueva información
+    const updatedPresentation = await ProdServServices.addProdServArchivo(id, keyType, idPresentacion, newArchivo);
+
+    res.status(201).json(updatedPresentation); // Retornar la presentación con el nuevo archivo
+  } catch (error) {
+    next(error);
+  }
+};
+
+//-------------------------PUT
+export const updateProdServArchivo = async (req, res, next) => {
+  try {
+    const { id, idPresentacion, archivoId } = req.params; // Obtener los IDs
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+    const updatedArchivo = req.body; // Obtener la nueva información de archivo
+
+    // Llamar al servicio para actualizar el archivo
+    const updatedPresentation = await ProdServServices.updateProdServArchivo(id, keyType, idPresentacion, archivoId, updatedArchivo);
+
+    res.status(200).json(updatedPresentation); // Retornar la presentación actualizada con el archivo modificado
+  } catch (error) {
+    next(error);
+  }
+};
+
+//------------------------DELETE
+export const deleteProdServArchivo = async (req, res, next) => {
+  try {
+    const { id, idPresentacion, archivoId } = req.params; // Obtener los IDs
+    const keyType = req.query.keyType || 'OK'; // Obtener el tipo de ID (OK o BK), por defecto 'OK'
+
+    // Llamar al servicio para eliminar el archivo
+    const updatedPresentation = await ProdServServices.deleteProdServArchivo(id, keyType, idPresentacion, archivoId);
+
+    res.status(200).json(updatedPresentation); // Retornar la presentación actualizada sin el archivo eliminado
   } catch (error) {
     next(error);
   }

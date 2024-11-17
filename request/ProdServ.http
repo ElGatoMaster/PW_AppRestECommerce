@@ -29,36 +29,49 @@ GET {{api}}/estadisticas
 
 //--------------------Presentaciones
 ### get
-GET {{api}}/presentacion/9001-000000000001
+GET {{api}}/presentacion/9003-000000000003
 ### GET
 get {{api}}/presentacion/9003-000000000003/info/9003-000000000003-000000001
 ### GET
-get {{api}}/presentacion/9001-000000000001/paquete/9001-000000000001-000000001
+get {{api}}/presentacion/9003-000000000003/paquete/9003-000000000003-000000001
 ### GET
-get {{api}}/presentacion/9001-000000000001/archivos/9001-000000000001-000000001
+get {{api}}/presentacion/9003-000000000003/archivos/9003-000000000003-000000001
+### GET
+
+### POST PAQUETE
+
+
+
 
 
 ### POST PRESENTACION
-Delete {{api}}/presentacion/9001-000000000001/info/9001-000000000001-000000003/E12345
+delete {{api}}/presentacion/9003-000000000003/archivos/9003-000000000003-000000001/213213213
 Content-Type: application/json
 
 {
-  "IdEtiquetaOK": "E12345",
-  "IdEtiqueta": "E67890",
-  "Valor": "Etiqueta de 2",
-  "IdTipoSeccionOK": "S001",
-  "Secuencia": 1,
-  "detail_row": {
-    "Activo": "S",
-    "Borrado": "N",
-    "detail_row_reg": [
-      {
-        "FechaReg": "2024-11-16T12:00:00.000Z",
-        "UsuarioReg": "admin"
+      "_id": false,
+      "IdArchivoOK": "213213213",
+      "IdArchivoBK": "654321",
+      "DesArchivo": "Manual del tonto",
+      "RutaArchivo": "/archivos/manuales/usuario.pdf",
+      "IdTipoArchivoOK": "PDF",
+      "Archivo": "usuario.pdf",
+      "IdTipoSeccionOK": "A2",
+      "Secuencia": 1,
+      "Principal": "S",
+      "detail_row": {
+        "Activo": "S",
+        "Borrado": "N",
+        "detail_row_reg": [
+          {
+            "_id": false,
+            "FechaReg": "2024-11-16T12:34:56Z",
+            "UsuarioReg": "admin"
+          }
+        ]
       }
-    ]
-  }
-}
+    }
+
 
 
 ### PUT PRESENTACION

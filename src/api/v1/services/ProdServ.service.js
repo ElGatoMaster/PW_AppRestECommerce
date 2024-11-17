@@ -447,3 +447,253 @@ export const deleteProdServPresentationInfoAdd = async (id, keyType, presentatio
   }
 };
 
+//-----------------------PAQUETE PRESENTACIONES
+//---------------------------POST
+export const addProdServPaquete = async (id, keyType, presentationId, newPaquete) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const matchesPresentationId = (p, presentationId) => {
+      const okMatch = p.IdPresentaOK && p.IdPresentaOK == presentationId;
+      const bkMatch = p.IdPresentaBK && p.IdPresentaBK == presentationId;
+      console.log(okMatch,bkMatch)
+      return okMatch || bkMatch;
+    };
+
+    const presentation = prodServItem.presentaciones.find(p => matchesPresentationId(p, presentationId));
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Agregar el nuevo paquete al array de paquetes de la presentación
+    presentation.paquete.push(newPaquete);
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación actualizada con el nuevo paquete
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+//-------------------------PUT
+export const updateProdServPaquete = async (id, keyType, presentationId, paqueteId, updatedPaquete) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const presentation = prodServItem.presentaciones.find(p => p.IdPresentaOK === presentationId || p.IdPresentaBK === presentationId);
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Buscar el paquete a actualizar
+    const paqueteIndex = presentation.paquete.findIndex(p => p.IdPresentaOK === paqueteId);
+    if (paqueteIndex === -1) {
+      throw boom.notFound('Paquete no encontrado.');
+    }
+
+    // Actualizar el paquete
+    presentation.paquete[paqueteIndex] = { ...presentation.paquete[paqueteIndex], ...updatedPaquete };
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación con el paquete actualizado
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+//------------------------DELETE
+export const deleteProdServPaquete = async (id, keyType, presentationId, paqueteId) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const presentation = prodServItem.presentaciones.find(p => p.IdPresentaOK === presentationId || p.IdPresentaBK === presentationId);
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Buscar el paquete a eliminar
+    const paqueteIndex = presentation.paquete.findIndex(p => pIdPresentaOK === paqueteId);
+    if (paqueteIndex === -1) {
+      throw boom.notFound('Paquete no encontrado.');
+    }
+
+    // Eliminar el paquete
+    presentation.paquete.splice(paqueteIndex, 1);
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación actualizada sin el paquete eliminado
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+
+///////////////////ARCHIVOS
+//-----------------------ARCHIVOS PRESENTACIONES
+//---------------------------POST
+export const addProdServArchivo = async (id, keyType, presentationId, newArchivo) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const matchesPresentationId = (p, presentationId) => {
+      const okMatch = p.IdPresentaOK && p.IdPresentaOK == presentationId;
+      const bkMatch = p.IdPresentaBK && p.IdPresentaBK == presentationId;
+      return okMatch || bkMatch;
+    };
+
+    const presentation = prodServItem.presentaciones.find(p => matchesPresentationId(p, presentationId));
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Agregar el nuevo archivo al array de archivos de la presentación
+    presentation.archivos.push(newArchivo);
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación actualizada con el nuevo archivo
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+//-------------------------PUT
+export const updateProdServArchivo = async (id, keyType, presentationId, archivoId, updatedArchivo) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const presentation = prodServItem.presentaciones.find(p => p.IdPresentaOK === presentationId || p.IdPresentaBK === presentationId);
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Buscar el archivo a actualizar
+    const archivoIndex = presentation.archivos.findIndex(a => a.IdArchivoOK === archivoId);
+    if (archivoIndex === -1) {
+      throw boom.notFound('Archivo no encontrado.');
+    }
+
+    // Actualizar el archivo
+    presentation.archivos[archivoIndex] = { ...presentation.archivos[archivoIndex], ...updatedArchivo };
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación con el archivo actualizado
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+//------------------------DELETE
+export const deleteProdServArchivo = async (id, keyType, presentationId, archivoId) => {
+  try {
+    let prodServItem;
+
+    // Buscar el producto según el tipo de ID
+    if (keyType === 'OK') {
+      prodServItem = await ProdServ.findOne({ IdProdServOK: id });
+    } else if (keyType === 'BK') {
+      prodServItem = await ProdServ.findOne({ IdProdServBK: id });
+    }
+
+    if (!prodServItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    // Buscar la presentación correspondiente
+    const presentation = prodServItem.presentaciones.find(p => p.IdPresentaOK === presentationId || p.IdPresentaBK === presentationId);
+
+    if (!presentation) {
+      throw boom.notFound('Presentación no encontrada.');
+    }
+
+    // Buscar el archivo a eliminar
+    const archivoIndex = presentation.archivos.findIndex(a => a.IdArchivoOK === archivoId);
+    if (archivoIndex === -1) {
+      throw boom.notFound('Archivo no encontrado.');
+    }
+
+    // Eliminar el archivo
+    presentation.archivos.splice(archivoIndex, 1);
+
+    // Guardar los cambios
+    await prodServItem.save();
+
+    return presentation; // Retornar la presentación actualizada sin el archivo eliminado
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};

@@ -23,7 +23,7 @@ router.delete('/soft/:id',prodServController.deletePutProdServItem);
 
 
 
-//PRESENTACIONES
+//PRESENTACIONES--------------------------------------------------------------------------------------------------
 router.get('/presentacion/:id', prodServController.getProdServPresentations);
 router.post('/presentacion/:id', prodServController.addProdServPresentation);
 router.put('/presentacion/:id/:presentationId', prodServController.updateProdServPresentation);
@@ -38,9 +38,15 @@ router.delete('/presentacion/:id/info/:idPresentacion/:infoAdId', prodServContro
 //------------------------------------------------------------------------------------------------------
 //PRESENTACIONES PAQUETE
 router.get('/presentacion/:id/paquete/:idPresentacion', prodServController.getProdServPresentationPaquete);
+router.post('/paquete/:id/presentacion/:presentationId', prodServController.addProdServPaquete);
+router.put('/paquete/:id/presentacion/:presentationId/:paqueteId', prodServController.updateProdServPaquete);
+router.delete('/paquete/:id/presentacion/:idPresentacion/:paqueteId', prodServController.deleteProdServPaquete);
+//---------------------------------------------------------------------------------------------
 //PRESENTACIONES ARCHIVOS
 router.get('/presentacion/:id/archivos/:idPresentacion', prodServController.getProdServPresentationArchivo);
-
+router.post('/presentacion/:id/archivos/:idPresentacion', prodServController.addProdServArchivo);
+router.put('/presentacion/:id/archivos/:idPresentacion/:archivoId', prodServController.updateProdServArchivo);
+router.delete('/presentacion/:id/archivos/:idPresentacion/:archivoId', prodServController.deleteProdServArchivo);
 
 
 export default router;
