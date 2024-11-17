@@ -21,4 +21,15 @@ router.delete('/hard/:id', prodServController.deleteProdServItem);
 //API DELETE solo cambiando el estado del producto
 router.delete('/soft/:id',prodServController.deletePutProdServItem);
 
+
+//+++++++++AGREGADO POR YVAN
+//API PATCH productos principal
+router.patch('/productosPrincipal/:id', prodServController.updatePrincipalProduct);
+
+//RUTAS PARA EL DE NEGOCIOS
+router.patch('/negocios/add/:id',prodServController.patchAddNegocio);
+router.patch('/negocios/update/:id',prodServController.patchUpdateNegocio);
+router.patch('/negocios/delete/:id/:idNegocio',prodServController.patchDeleteNegocio);
+//+++++++AGREGADO POR YVAN
+
 export default router;

@@ -3,7 +3,7 @@
 ### GET
 GET {{api}}
 ### GET ITEM
-GET {{api}}/1
+GET {{api}}/producto/9004-000000000004
 ### GET ITEM
 GET {{api}}/102?keyType=OK
 ### GET ITEM
@@ -177,3 +177,38 @@ DELETE {{api}}/hard/103
 DELETE {{api}}/soft/102?keyType=OK
 ### DELETE Solo en estatus
 DELETE {{api}}/soft/101
+
+##PROBANDO EL DE NEGOCIOS ADD
+PATCH {{api}}/negocios/add/9004-000000000004
+Content-Type: application/json
+
+{
+        "detail_row": {
+          "Activo": "N",
+          "Borrado": "N",
+          "detail_row_reg": []
+        },
+        "IdNegocioOK": "9003-TODOS"
+}
+
+##Probando Negocios update
+PATCH {{api}}/negocios/update/9004-000000000004
+Content-Type: application/json
+
+{
+        "detail_row": {
+          "Activo": "N",
+          "Borrado": "S",
+          "detail_row_reg": [
+            {
+              "FechaReg": "2023-11-14T17:42:25.804Z",
+              "UsuarioReg": "TestUser"
+            }
+          ]
+        },
+        "IdNegocioOK": "gfdg",
+        "_id": "6553b181182ea183b3889de2"
+}
+
+##Probando Negocios DELETE
+PATCH {{api}}/negocios/delete/9004-000000000004/9003-TODOS

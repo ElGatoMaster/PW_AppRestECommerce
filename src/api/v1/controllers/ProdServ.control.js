@@ -194,3 +194,100 @@ export const deletePutProdServItem = async (req, res, next) => {
     next(error);
   }
 };  
+
+//cONTROLADOR 
+export const updatePrincipalProduct = async (req, res, next) => {
+  try {
+      const { id } = req.params;  // El id del producto está siendo recibido como parámetro
+      const updateData = req.body; // Los datos de actualización se reciben en el cuerpo de la solicitud
+
+      // Llamamos al servicio para actualizar el producto
+      const updatedProduct = await ProdServServices.updatePrincipalProductService (id, updateData);
+
+      // Si no se encontró el producto, retornamos un error 404
+      if (!updatedProduct) {
+          return res.status(404).json({ message: 'Producto no encontrado' });
+      }
+
+      // Si se actualiza correctamente, retornamos el producto actualizado
+      res.status(200).json(updatedProduct);
+  } catch (error) {
+      console.error('Error actualizando el producto:', error);
+      next(error);  // Se pasa el error al middleware global
+  }
+};
+//---------------Controlador Patch PRINCIPAL PRODUCTOS
+
+//Control para patch Add en un NEGOCIOS.
+export const patchAddNegocio = async (req,res,next) => {
+  try{
+    const { id } = req.params;
+    const { keyType='OK' } = req.query;
+    console.log('controlador id -> ', id);
+    console.log('controlador keyType -> ', keyType);
+
+    const body = req.body;
+    console.log('Body to update ->', body);
+
+    const prodServPatched = await ProdServServices.patchAddNegocio(id,keyType,body);
+
+    if(!prodServPatched){
+      throw boom.badRequest('No se pudo realizar la accion');
+    }else{
+      res.status(200).json(prodServPatched);
+    }
+
+  }catch(error){
+    console.error('error en el controlador');
+    next(error);
+  }
+};
+//--------------PATCH ADD NEGOCIOS
+
+//----------------------PATCH Update NEGOCIOS
+export const patchUpdateNegocio = async (req,res,next) => {
+  try{
+    const { id } = req.params;
+    console.log('Controlador id -> ', id);
+
+    const body = req.body;
+    console.log('Body to update ->', body);
+
+    const prodServPatched = await ProdServServices.patchUpdateNegocio(id,body);
+
+    if(!prodServPatched){
+      throw boom.badRequest('No se pudo realizar la accion');
+    }else{
+      res.status(200).json(prodServPatched);
+    }
+
+  }catch(error){
+    console.error('error en el controlador');
+    next(error);
+  }
+};
+//----------------------PATCH Update NEGOCIOS
+
+//----------------------PATCH Delete NEGOCIOS
+export const patchDeleteNegocio = async (req,res,next) => {
+  try{
+    const { id } = req.params;
+    console.log('controlador id -> ', id);
+
+    const {idNegocio} = req.params;
+    console.log('ID to delete ->', idNegocio);
+
+    const prodServPatched = await ProdServServices.patchDeleteNegocio(id,idNegocio);
+
+    if(!prodServPatched){
+      throw boom.badRequest('No se pudo realizar la accion');
+    }else{
+      res.status(200).json(prodServPatched);
+    }
+
+  }catch(error){
+    console.error('error en el controlador');
+    next(error);
+  }
+};
+//----------------------PATCH Delete NEGOCIOS
