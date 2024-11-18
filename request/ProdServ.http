@@ -31,7 +31,7 @@ GET {{api}}/estadisticas
 ### get
 GET {{api}}/presentacion/9003-000000000003
 ### GET
-get {{api}}/presentacion/9003-000000000003/info/9003-000000000003-000000001
+get {{api}}/presentacion/9001/info/9004-000000000004-000000001
 ### GET
 get {{api}}/presentacion/9003-000000000003/paquete/9003-000000000003-000000001
 ### GET
@@ -43,9 +43,9 @@ get {{api}}/presentacion/9003-000000000003/archivos/9003-000000000003-000000001
 
 
 
-
+router.delete('/paquete/:id/presentacion/:idPresentacion/:paqueteId', prodServController.deleteProdServPaquete);
 ### POST PRESENTACION
-delete {{api}}/presentacion/9003-000000000003/archivos/9003-000000000003-000000001/213213213
+delete {{api}}/paquete/9001-000000000001/presentacion/9001-000000000001-000000003/999999999999999999999
 Content-Type: application/json
 
 {

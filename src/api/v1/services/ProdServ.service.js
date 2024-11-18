@@ -555,7 +555,7 @@ export const deleteProdServPaquete = async (id, keyType, presentationId, paquete
     }
 
     // Buscar el paquete a eliminar
-    const paqueteIndex = presentation.paquete.findIndex(p => pIdPresentaOK === paqueteId);
+    const paqueteIndex = presentation.paquete.findIndex(p => p.IdPresentaOK === paqueteId);
     if (paqueteIndex === -1) {
       throw boom.notFound('Paquete no encontrado.');
     }
