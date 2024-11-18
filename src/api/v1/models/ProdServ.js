@@ -56,7 +56,7 @@ const ProdServSchema = new mongoose.Schema({
             CodigoBarras: {type: String},
             DesPresenta: {type: String},
             Indice: {type: String},
-            presentaciones_info_add: [
+            info_add: [
                 {
                     _id: false,
                     IdEtiquetaOK: {type: String},
@@ -77,7 +77,7 @@ const ProdServSchema = new mongoose.Schema({
                     },
                 },
             ],
-            presentaciones_paquete: [
+            paquete: [
                 {
                     _id: false,
                     IdPresentaOK: {type: String},
@@ -97,7 +97,7 @@ const ProdServSchema = new mongoose.Schema({
                     },
                 },
             ],
-            presentaciones_archivos: [
+            archivos: [
                 {
                     _id: false,
                     IdArchivoOK: {type: String},
