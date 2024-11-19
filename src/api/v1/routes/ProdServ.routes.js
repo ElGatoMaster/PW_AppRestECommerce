@@ -58,4 +58,12 @@ router.post('/presentacion/:id/archivos/:idPresentacion', prodServController.add
 router.put('/presentacion/:id/archivos/:idPresentacion/:archivoId', prodServController.updateProdServArchivo);
 router.delete('/presentacion/:id/archivos/:idPresentacion/:archivoId', prodServController.deleteProdServArchivo);
 
+//RUTAS PARA ESTATUS
+//Put Estatus
+router.put('/producto/:productId/estatus', prodServController.updateEstatus);
+//POST Estatus
+router.post('/producto/:productId/estatus', prodServController.addEstatus);
+//Delete Estatus
+router.delete('/producto/:productId/:tipo', prodServController.DeleteEstatus);
+
 export default router;

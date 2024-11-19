@@ -831,3 +831,67 @@ export const deleteProdServArchivo = async (id, keyType, presentationId, archivo
     throw boom.internal(error);
   }
 };
+
+//--------------------------------ESTATUS---------------------------------
+// Metodo Post ESTATUS
+export const addEstatusToProduct = async (productId, estatusData) => {
+  try {
+      const product = await ProdServ.findOne({ 'IdProdServOK': productId }); // Busca el producto por el ID
+      if (!product) {
+          throw new Error("Producto no encontrado");
+      }
+      // Agregar un nuevo estatus al arreglo de estatus
+      product.estatus.push(estatusData);
+      await product.save(); // Guarda los cambios en la base de datos
+      return product; // Devuelve el producto actualizado
+  } catch (error) {
+      throw new Error(error.message);
+  }
+};
+//-------------------------------Put Estatus----------------------------
+// Metodo PUT
+export const updateEstatus = async (productId, estatusData) => {
+  try {
+    console.log("Id service: ",productId);
+    console.log("Data Service: ",estatusData);
+    const updatedProduct = await ProdServ.findOneAndUpdate(
+      { IdProdServOK: productId, 'estatus.IdTipoEstatusOK': estatusData.IdTipoEstatusOK },
+      {
+        $set: {
+          'estatus.$.Actual': estatusData.Actual,
+          'estatus.$.Observacion': estatusData.Observacion || ''
+        }
+      },
+      { new: true } // Esto nos devuelve el documento actualizado
+    );
+    if (!updatedProduct) {
+      throw new Error('Producto o estatus no encontrado');
+    }
+    return updatedProduct;
+  } catch (error) {
+    throw new Error(`Error al actualizar estatus: ${error.message}`);
+  }
+};
+
+//-----------------------------------Delete Estatus-------------
+// Metodo Delete
+export const deleteEstatus = async (productId, tipo) => {
+  try {
+    // Utilizamos findOneAndUpdate para eliminar el estatus de un producto sin eliminar el producto
+    const updatedProduct = await ProdServ.findOneAndUpdate(
+      { IdProdServOK: productId },  // Filtro por el ID del producto
+      { $pull: { estatus: { IdTipoEstatusOK: tipo } } },  // Elimina el estatus con ese tipo
+      { new: true }  // Devuelve el producto actualizado
+    );
+
+    // Si no se encuentra el producto o el estatus, lanzamos un error
+    if (!updatedProduct) {
+      throw new Error('Producto o estatus no encontrado');
+    }
+
+    // Devuelve el producto actualizado
+    return updatedProduct;
+  } catch (error) {
+    throw new Error(`Error: ${error.message}`);
+  }
+};
