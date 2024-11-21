@@ -196,15 +196,6 @@ export const deletePutProdServItem = async (req, res, next) => {
 };  
 
 
-
-
-
-
-
-
-
-
-
 //-----------------------------------------PRESENTACIONES---------------------------------------------------/
 export const getProdServPresentations = async (req, res, next) => {
   try {
@@ -434,7 +425,6 @@ export const deleteProdServPaquete = async (req, res, next) => {
 //Get
 //---------------------------------PRESENTACIONES presentaciones_paquete------------------------------/
 //----------------------------------GET
-
 export const getProdServPresentationArchivo = async (req, res, next) => {
   try {
     const { id, idPresentacion } = req.params;  // Obtener el id del producto y el id de la presentación
@@ -499,5 +489,89 @@ export const deleteProdServArchivo = async (req, res, next) => {
     res.status(200).json(updatedPresentation); // Retornar la presentación actualizada sin el archivo eliminado
   } catch (error) {
     next(error);
+  }
+};
+
+
+//--------------------Estatus--------------------
+//POST
+export const addEstatus = async (req, res) => {
+  const { productId } = req.params; // Obtiene el ID del producto desde los parámetros de la ruta
+  const { IdTipoEstatusOK, Actual, Observacion } = req.body; // Obtiene los datos del estatus desde el cuerpo de la solicitud
+  if (!IdTipoEstatusOK || !Actual || !Observacion) {
+      return res.status(400).json({ message: 'Faltan parámetros obligatorios' });
+  }
+  try {
+      // Datos del nuevo estatus
+      const estatusData = {
+          IdTipoEstatusOK,
+          Actual,
+          Observacion,
+          detail_row: {
+              Activo: 'S',
+              Borrado: 'N',
+              detail_row_reg: [
+                  {
+                      FechaReg: new Date(),
+                      UsuarioReg: 'SYSTEM',
+                  },
+              ],
+          },
+      };
+      // Llama al servicio para agregar el estatus
+      const updatedProduct = await ProdServServices.addEstatusToProduct(productId, estatusData);
+      // Responde con el producto actualizado
+      return res.status(200).json(updatedProduct);
+  } catch (error) {
+      return res.status(500).json({ message: error.message });
+  }
+};
+
+//put
+export const updateEstatus = async (req, res) => {
+  const { productId } = req.params; // Obtenemos el ID del producto desde los parámetros de la ruta
+  const { IdTipoEstatusOK, Actual, Observacion } = req.body; // Obtenemos los datos del estatus desde el cuerpo de la solicitud
+  console.log("Producto id: ",productId);
+  console.log(IdTipoEstatusOK,"  ",Actual,"  ",Observacion);
+  // Validamos los campos obligatorios
+  if (!IdTipoEstatusOK || !Actual) {
+    return res.status(400).json({ message: 'Faltan parámetros obligatorios: IdTipoEstatusOK y Actual' });
+  }
+  try {
+    // Preparamos los datos de estatus a actualizar
+    const estatusData = { IdTipoEstatusOK, Actual, Observacion };
+    // Llamamos al servicio para actualizar el estatus del producto
+    const updatedProduct = await ProdServServices.updateEstatus(productId, estatusData);
+    // Si no se encontró o se pudo actualizar el producto, enviamos un mensaje adecuado
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Producto no encontrado o estatus no actualizado' });
+    }
+    // Respondemos con el producto actualizado
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    // Capturamos cualquier error y respondemos con un mensaje más claro
+    console.error(error); // Para depuración en consola
+    return res.status(500).json({ message: `Error al actualizar el estatus: ${error.message}` });
+  }
+};
+
+//Delete
+export const DeleteEstatus = async (req, res) => {
+  const { productId, tipo } = req.params;  // Acceder a los parámetros desde la URL
+
+  console.log("Id Producto:", productId);  // Debería ser el ID del producto, como '9001-000000000001'
+  console.log("Tipo de estatus:", tipo);  // El tipo de estatus a eliminar, como '1'
+
+  try {
+    // Llamamos al servicio para eliminar el estatus
+    const updatedProduct = await ProdServServices.deleteEstatus(productId, tipo);
+
+    // Si la eliminación fue exitosa, devolvemos el producto actualizado
+    return res.status(200).json(updatedProduct);
+
+  } catch (error) {
+    console.error("Error al eliminar estatus:", error.message);
+    // Si ocurre un error, respondemos con el mensaje de error
+    return res.status(500).json({ message: `Error al eliminar estatus: ${error.message}` });
   }
 };
