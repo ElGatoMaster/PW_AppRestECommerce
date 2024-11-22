@@ -306,3 +306,14 @@ Content-Type: application/json
 
 ##Probando Negocios DELETE
 PATCH {{api}}/negocios/delete/9004-000000000004/9003-TODOS
+
+### patch
+PATCH {{api}}/9002-000000000002/estatus/aa
+Content-Type: application/json
+Authorization: Bearer <tu_token_de_autenticación>
+
+{
+  "Activo": "M",
+  "Borrado": "M",
+  "detail_row_reg": []
+}

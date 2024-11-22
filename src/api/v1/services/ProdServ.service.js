@@ -895,3 +895,32 @@ export const deleteEstatus = async (productId, tipo) => {
     throw new Error(`Error: ${error.message}`);
   }
 };
+
+//----------------Detalles Estatus
+export const DetallesEstatus = async (prodServId, estatusId, data) => {
+  try {
+    const prodServ = await ProdServ.findOne({ IdProdServOK: prodServId });
+
+    if (!prodServ) {
+      throw new Error('Producto/Servicio no encontrado');
+    }
+
+    const estatus = prodServ.estatus.find(estatus => estatus.IdTipoEstatusOK === estatusId);
+    if (!estatus) {
+      throw new Error('Estatus no encontrado');
+    }
+
+    estatus.Actual = data.Actual || estatus.Actual;
+    estatus.detail_row.Activo = data.Activo || estatus.detail_row.Activo;
+    estatus.detail_row.Borrado = data.Borrado || estatus.detail_row.Borrado;
+    estatus.detail_row.detail_row_reg.push({
+      FechaReg: new Date(),
+      UsuarioReg: data.UsuarioReg || 'SYSTEM',
+    });
+
+    await prodServ.save();
+    return prodServ;
+  } catch (error) {
+    throw error;
+  }
+};

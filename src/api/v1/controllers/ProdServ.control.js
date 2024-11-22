@@ -575,3 +575,26 @@ export const DeleteEstatus = async (req, res) => {
     return res.status(500).json({ message: `Error al eliminar estatus: ${error.message}` });
   }
 };
+
+//----------------Detalles Estatus
+export const DetallesEstatus = async (req, res) => {
+  const { prodServId, estatusId } = req.params;
+  const { Activo, Borrado, UsuarioReg } = req.body;
+
+  try {
+    const updatedProdServ = await ProdServServices.DetallesEstatus(prodServId, estatusId, {
+      Activo,
+      Borrado,
+      UsuarioReg,
+    });
+
+    res.status(200).json({
+      message: 'Estatus actualizado correctamente',
+      updatedProdServ,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

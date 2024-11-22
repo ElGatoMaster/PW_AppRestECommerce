@@ -54,5 +54,6 @@ router.put('/producto/:productId/estatus', prodServController.updateEstatus);
 router.post('/producto/:productId/estatus', prodServController.addEstatus);
 //Delete Estatus
 router.delete('/producto/:productId/:tipo', prodServController.DeleteEstatus);
-
+//detalles 
+router.patch('/:prodServId/estatus/:estatusId', prodServController.DetallesEstatus);
 export default router;
