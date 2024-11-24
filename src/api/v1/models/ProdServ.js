@@ -56,7 +56,7 @@ const ProdServSchema = new mongoose.Schema({
             CodigoBarras: {type: String},
             DesPresenta: {type: String},
             Indice: {type: String},
-            info_add: [
+            info_ad: [
                 {
                     _id: false,
                     IdEtiquetaOK: {type: String},
@@ -167,6 +167,5 @@ const ProdServSchema = new mongoose.Schema({
         ],
     },
 }, {versionKey: false});
-
 
 module.exports = mongoose.model('cat_productos', ProdServSchema);
