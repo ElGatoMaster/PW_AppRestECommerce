@@ -607,6 +607,7 @@ export const addProdServPaquete = async (id, keyType, presentationId, newPaquete
       return okMatch || bkMatch;
     };
 
+    //Busca toda la presentación
     const presentation = prodServItem.presentaciones.find(p => matchesPresentationId(p, presentationId));
 
     if (!presentation) {
@@ -648,7 +649,7 @@ export const updateProdServPaquete = async (id, keyType, presentationId, paquete
       throw boom.notFound('Presentación no encontrada.');
     }
 
-    // Buscar el paquete a actualizar
+    // Buscar el paquete a actualizar en el arreglo
     const paqueteIndex = presentation.paquete.findIndex(p => p.IdPresentaOK === paqueteId);
     if (paqueteIndex === -1) {
       throw boom.notFound('Paquete no encontrado.');
@@ -689,7 +690,7 @@ export const deleteProdServPaquete = async (id, keyType, presentationId, paquete
       throw boom.notFound('Presentación no encontrada.');
     }
 
-    // Buscar el paquete a eliminar
+    // Buscar el paquete a eliminar en el arreglo 
     const paqueteIndex = presentation.paquete.findIndex(p => p.IdPresentaOK === paqueteId);
     if (paqueteIndex === -1) {
       throw boom.notFound('Paquete no encontrado.');
@@ -887,6 +888,100 @@ export const deleteEstatus = async (productId, tipo) => {
     // Si no se encuentra el producto o el estatus, lanzamos un error
     if (!updatedProduct) {
       throw new Error('Producto o estatus no encontrado');
+    }
+
+    // Devuelve el producto actualizado
+    return updatedProduct;
+  } catch (error) {
+    throw new Error(`Error: ${error.message}`);
+  }
+};
+
+
+//-------------------------- INFORMACION ADICIONAL --------------------------------------------------------
+//GET trae toda la info por medio del id
+//a ver si jala SI JALOOOOO LETS FUCKING GOOOOOOOOOOOOOOOOOO
+export const getInfoAddi = async (id) => {
+  let infoAddiItem
+  try {
+    infoAddiItem = await ProdServ.findOne({ IdProdServOK: id }).select('info_ad');
+
+    if (!infoAddiItem) {
+      throw boom.notFound('Producto no encontrado.');
+    }
+
+    return infoAddiItem.info_ad;  // Retornamos solo las info adicional
+
+  } catch (error) {
+    throw boom.internal(error);
+  }
+};
+
+
+//POST ya jala
+export const addInfoAdi = async (id, infoAdiData) => {
+  console.log("Datos recibidos en el servicio:", infoAdiData);
+
+  try {
+    const pInfoAdi = await ProdServ.findOne({ 'IdProdServOK': id }); // Busca el producto por el ID
+    if (!pInfoAdi) { 
+        throw new Error("Producto no encontrado");
+    }
+    // Agregar información adicional nueva al arreglo
+    pInfoAdi.info_ad.push(infoAdiData);
+    await pInfoAdi.save(); // Guarda los cambios en la base de datos
+
+    console.log("Producto actualizado con la nueva info_ad:", pInfoAdi);
+
+    console.log("Producto actualizado: ", pInfoAdi);
+    return pInfoAdi; // Devuelve el producto actualizado
+} catch (error) {
+    throw new Error(error.message);
+}
+};
+
+
+//PUT ya jala
+export const updateInfoAdi = async (id, infoAdiData) => {
+  try {
+  
+    const updatedProduct = await ProdServ.findOneAndUpdate(
+      { IdProdServOK: id, 'info_ad.IdEtiqueta': infoAdiData.IdEtiqueta },
+      {
+        $set: {
+          //no creo que IdEtiqueta ni IdEtiquetaOK deban de actualizarse
+          'info_ad.$.IdEtiquetaOK': infoAdiData.IdEtiquetaOK,
+          'info_ad.$.IdEtiqueta': infoAdiData.IdEtiqueta,
+          'info_ad.$.Valor': infoAdiData.Valor,
+          'info_ad.$.IdTipoSeccionOK': infoAdiData.IdTipoSeccionOK,
+          'info_ad.$.Secuencia': infoAdiData.Secuencia
+        }
+      },
+      { new: true } // Esto nos devuelve el documento actualizado
+    );
+    if (!updatedProduct) {
+      throw new Error('Producto o informacion adicional no encontrada');
+    }
+    return updatedProduct;
+  } catch (error) {
+    throw new Error(`Error al actualizar la información adicional: ${error.message}`);
+  }
+};
+
+//DELETE
+export const deleteInfoAdi = async (id, idEti) => {
+  try {
+    // Utilizamos findOneAndUpdate para eliminar una info adicional en especifio
+    // de un producto sin eliminar el producto en sí
+    const updatedProduct = await ProdServ.findOneAndUpdate(
+      { IdProdServOK: id },  // Filtro por el ID del producto
+      { $pull: { info_ad: { IdEtiqueta: idEti } } },  // Elimina el estatus con ese tipo
+      { new: true }  // Devuelve el producto actualizado
+    );
+
+    // Si no se encuentra el producto o la etiqueta, lanzamos un error
+    if (!updatedProduct || updatedProduct.info_ad.length === 0) {
+      throw new Error('Producto o información adicional no encontrada');
     }
 
     // Devuelve el producto actualizado

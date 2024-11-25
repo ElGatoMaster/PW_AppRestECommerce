@@ -15,7 +15,7 @@ GET {{api}}/search?q=REFRIGERADOR HORIZONTAL 250L 1PTA
 ### GET POR ARTICULOS ACTIVOS ACTIVO 
 GET {{api}}/activos
 ### GET POR ESTATUS
-GET {{api}}/estatus/VIGENTE
+GET {{api}}/estatus/IdEstatusCatProdServ-IdVigente
 ### GET POR NEGOCIO QUE LO VENDE
 GET {{api}}/negocio/9001-TODOS
 ### GET POR PRESENTACION
@@ -23,7 +23,36 @@ GET {{api}}/presentacion/descripcion/Empresarial Gris Oxford - 500GB - 32RAM
 ### GET ESTADISTICAS
 GET {{api}}/estadisticas
 
+###GET INFO ADICIONAL
+GET {{api}}/producto/9002-000000000002/info_ad
 
+###POST INFO ADICIONAL
+POST {{api}}/producto/9002-000000000002/info_ad
+Content-Type: application/json
+
+{
+  "IdEtiquetaOK": "RosaOK",
+  "IdEtiqueta": "Rosatiqueta",
+  "Valor": "Valor Rosa",
+  "IdTipoSeccionOK": "TipoSeccionROSA",
+  "Secuencia": 11
+}
+
+###PUT INFO ADICIONAL
+PUT {{api}}/producto/9002-000000000002/info_ad
+Content-Type: application/json
+
+{
+  "IdEtiquetaOK": "Kittyketa",
+  "IdEtiqueta": "Kittyketa001",
+  "Valor": "Rebeca",
+  "IdTipoSeccionOK": "KittySeccionOk",
+  "Secuencia": 1
+}
+###DELETE INFO ADICIONAL
+DELETE {{api}}/producto/9002-000000000002/info_ad/Kittyketa001
+
+Content-Type: application/json
 
 ### POST ITEM PRODUCTO
 POST {{api}}
