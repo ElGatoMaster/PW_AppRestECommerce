@@ -198,10 +198,9 @@ export const deletePutProdServItem = async (req, res, next) => {
 //cONTROLADOR 
 export const updatePrincipalProduct = async (req, res, next) => {
   try {
-      const { id } = req.params;  // El id del producto está siendo recibido como parámetro
-      const updateData = req.body; // Los datos de actualización se reciben en el cuerpo de la solicitud
+      const { id } = req.params;  
+      const updateData = req.body; 
 
-      // Llamamos al servicio para actualizar el producto
       const updatedProduct = await ProdServServices.updatePrincipalProductService (id, updateData);
 
       // Si no se encontró el producto, retornamos un error 404
@@ -660,5 +659,139 @@ export const DeleteEstatus = async (req, res) => {
     console.error("Error al eliminar estatus:", error.message);
     // Si ocurre un error, respondemos con el mensaje de error
     return res.status(500).json({ message: `Error al eliminar estatus: ${error.message}` });
+  }
+};
+
+//----------------Detalles Estatus
+export const DetallesEstatus = async (req, res) => {
+  const { prodServId, estatusId } = req.params;
+  const { Activo, Borrado, UsuarioReg } = req.body;
+
+  try {
+    const updatedProdServ = await ProdServServices.DetallesEstatus(prodServId, estatusId, {
+      Activo,
+      Borrado,
+      UsuarioReg,
+    });
+
+    res.status(200).json({
+      message: 'Estatus actualizado correctamente',
+      updatedProdServ,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+
+///El diablo
+//--------------------------------- INFO ADICIONAL -----------------------------------------------------
+//Deben ser get, put y post
+//GET
+// Obtener info adicional
+export const getInfoAddi = async (req, res, next) => {
+  try {
+
+    const {id} = req.params;
+
+    //llamar al servicio para traer la información adicional
+    const infoAddi = await ProdServServices.getInfoAddi(id);
+
+    if(!infoAddi || infoAddi.length === 0){
+      throw boom.notFound('Este producto no posee etiquetas');
+    }else{
+      res.status(200).json(infoAddi); //Retorna únicamente la info adicional
+    }
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+//POST ya jala
+export const addInfoAdi = async (req, res) => {
+  const { id } = req.params; // Obtiene el ID del producto desde los parámetros de la ruta
+  const { IdEtiquetaOK, IdEtiqueta, Valor, IdTipoSeccionOK, Secuencia } = req.body; // Obtienela info adicional desde el cuerpo
+  if (!IdEtiquetaOK|| !IdEtiqueta || !Valor || !IdTipoSeccionOK || Secuencia === undefined) {
+      return res.status(400).json({ message: 'Faltan parámetros obligatorios' });
+  }
+  try {
+      // Datos de la info adicional
+      const infoAdiData = {
+          IdEtiquetaOK,
+          IdEtiqueta,
+          Valor,
+          IdTipoSeccionOK,
+          Secuencia,
+          detail_row: {
+              Activo: 'S',
+              Borrado: 'N',
+              detail_row_reg: [
+                  {
+                      FechaReg: new Date(),
+                      UsuarioReg: 'SYSTEM',
+                  },
+              ],
+          },
+      };
+
+      // LOG IMPORTANTE
+      console.log("Datos que se envían al servicio:", infoAdiData); 
+
+      // Llama al servicio para agregar la informacion
+      const updatedProduct = await ProdServServices.addInfoAdi(id, infoAdiData);
+      // Responde con el producto actualizado
+      return res.status(200).json(updatedProduct);
+  } catch (error) {
+      return res.status(500).json({ message: error.message });
+  }
+};
+
+//PUT
+export const updateInfoAdi = async (req, res) => {
+  const { id } = req.params; // Obtenemos el ID del producto desde los parámetros de la ruta
+  const { IdEtiquetaOK, IdEtiqueta,Valor,IdTipoSeccionOK, Secuencia } = req.body; // Obtenemos los datos del estatus desde el cuerpo de la solicitud
+
+  try {
+    // Preparamos los datos de estatus a actualizar
+    const infoAdiData = { IdEtiquetaOK, IdEtiqueta, Valor, IdTipoSeccionOK, Secuencia };
+    // Llamamos al servicio para actualizar el estatus del producto
+    const updatedProduct = await ProdServServices.updateInfoAdi(id, infoAdiData);
+    // Si no se encontró o se pudo actualizar el producto, enviamos un mensaje adecuado
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Producto no encontrado o estatus no actualizado' });
+    }
+    // Respondemos con el producto actualizado
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    // Capturamos cualquier error y respondemos con un mensaje más claro
+    console.error(error); // Para depuración en consola
+    return res.status(500).json({ message: `Información adicional no encontrada para actualizar: ${error.message}` });
+  }
+};
+
+
+//DELETE
+
+export const deleteInfoAdi = async (req, res) => {
+  const { id, idEti } = req.params;  // Acceder a los parámetros desde la URL
+
+  console.log("Id Producto:", id);  // Debería ser el ID del producto, como '9001-000000000001'
+  console.log("Etiqueta:", idEti);  // Muestra la etiqueta
+
+  try {
+    // Llamamos al servicio para eliminar el estatus
+    const updatedProduct = await ProdServServices.deleteInfoAdi(id, idEti);
+
+    // Si la eliminación fue exitosa, devolvemos el producto actualizado
+    return res.status(200).json(updatedProduct);
+
+  } catch (error) {
+    console.error("Error al eliminar la información adicional:", error.message);
+    // Si ocurre un error, respondemos con el mensaje de error
+    return res.status(500).json({ message: `Error al eliminar la información: ${error.message}` });
   }
 };

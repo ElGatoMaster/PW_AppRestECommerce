@@ -65,5 +65,17 @@ router.put('/producto/:productId/estatus', prodServController.updateEstatus);
 router.post('/producto/:productId/estatus', prodServController.addEstatus);
 //Delete Estatus
 router.delete('/producto/:productId/:tipo', prodServController.DeleteEstatus);
+//detalles 
+router.patch('/:prodServId/estatus/:estatusId', prodServController.DetallesEstatus);
+
+//++++++++++++++++++ PAU INFO ADICIONAL
+//GET INFO ADD
+router.get('/producto/:id/info_ad', prodServController.getInfoAddi);
+//POST INFO ADD
+router.post('/producto/:id/info_ad',prodServController.addInfoAdi);
+//PUT INFO ADD
+router.put('/producto/:id/info_ad',prodServController.updateInfoAdi);
+//DELETE INFO ADD
+router.delete('/producto/:id/info_ad/:idEti', prodServController.deleteInfoAdi);
 
 export default router;
